@@ -4998,13 +4998,17 @@
 
     .app-overlay-button { margin-left: 8px; background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer; }
     .app-overlay-button:hover { color: var(--text); background: rgba(14,165,233,.15); }
-    .overlay-control-menu { display:none; position:fixed; z-index:10060; top:44px; right:12px; width:min(360px,calc(100vw - 24px)); padding:12px; border:1px solid var(--border,#334155); border-radius:10px; background:var(--bg-panel,#131923); color:var(--text,#edf2ff); box-shadow:0 8px 28px rgba(0,0,0,.4); font:12px/1.4 Arial,sans-serif; }
-    .overlay-control-menu.open { display:block; }
-    #overlay-menu-ticker, #overlay-menu-text { top:auto; bottom:46px; right:auto; left:12px; }
+    .overlay-control-menu { display:block; visibility:hidden; opacity:0; transform:translateY(-8px) scale(.98); pointer-events:none; position:fixed; z-index:10060; top:44px; right:12px; width:min(360px,calc(100vw - 24px)); padding:12px; border:1px solid var(--border,#334155); border-radius:10px; background:var(--bg-panel,#131923); color:var(--text,#edf2ff); box-shadow:0 8px 28px rgba(0,0,0,.4); font:12px/1.4 Arial,sans-serif; transition:opacity .2s ease, transform .2s ease, visibility 0s linear .2s; }
+    .overlay-control-menu.open { visibility:visible; opacity:1; transform:translateY(0) scale(1); pointer-events:auto; transition-delay:0s; }
+    #overlay-menu-ticker, #overlay-menu-text { top:auto; bottom:46px; right:auto; left:12px; transform:translateY(8px) scale(.98); }
+    #overlay-menu-ticker.open, #overlay-menu-text.open { transform:translateY(0) scale(1); }
     .overlay-control-menu h3 { margin:0 0 8px; font-size:13px; }
     .overlay-control-menu textarea,.overlay-control-menu input,.overlay-control-menu select { box-sizing:border-box; width:100%; min-width:0; }
     .overlay-control-menu textarea { height:56px; resize:vertical; }
     .overlay-control-menu .ov-row { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:7px; }
+    .overlay-control-menu .ov-color-row { display:grid; grid-template-columns:auto 1fr; align-items:center; gap:10px; margin-top:8px; }
+    .overlay-control-menu .ov-color-row input[type="color"] { width:40px; height:28px; padding:2px; }
+    .overlay-control-menu .ov-color-row input[type="range"] { width:100%; }
     .overlay-control-menu label { display:block; margin-top:6px; font-size:10px; color:var(--text-secondary,#a6afc2); }
     .overlay-control-menu button { margin-top:8px; padding:6px 10px; border:0; border-radius:6px; cursor:pointer; font-weight:700; }
     .ov-live { background:#2f6df6; color:white; } .ov-clear { background:#384152; color:white; margin-left:5px; }
@@ -16688,14 +16692,15 @@
   <section class="overlay-control-menu" id="overlay-menu-ticker" aria-label="Ticker controls">
     <h3>Ticker</h3><textarea id="ov-ticker-text" placeholder="Nursery is open in room 4 • Welcome!"></textarea>
     <div class="ov-row"><label>Text size %<input id="ov-ticker-scale" type="number" min="50" max="250" value="100"></label><label>Scroll seconds<input id="ov-ticker-speed" type="number" min="6" max="60" value="18"></label></div>
-    <label>Background RGBA<input id="ov-ticker-bg" value="rgba(0, 0, 0, 0.72)"></label>
+    <div class="ov-row"><label>Text color<input id="ov-ticker-color" type="color" value="#ffffff"></label><label>Background color<input id="ov-ticker-bg-color" type="color" value="#000000"></label></div>
+    <label>Background opacity <span id="ov-ticker-alpha-value">72%</span><input id="ov-ticker-alpha" type="range" min="0" max="100" value="72" oninput="updateOverlayAlphaLabel('ticker')"></label>
     <button class="ov-live" onclick="sendPanelOverlay('ticker',true)">Show / Update</button><button class="ov-clear" onclick="sendPanelOverlay('ticker',false)">Clear</button>
   </section>
   <section class="overlay-control-menu" id="overlay-menu-text" aria-label="Text overlay controls">
     <h3>Text Overlay</h3><textarea id="ov-text-content" placeholder="Enter on-screen text…"></textarea>
     <div class="ov-row"><label>Left %<input id="ov-text-x" type="number" min="0" max="100" value="50"></label><label>Top %<input id="ov-text-y" type="number" min="0" max="100" value="50"></label></div>
     <div class="ov-row"><label>Size %<input id="ov-text-scale" type="number" min="50" max="250" value="100"></label><label>Text color<input id="ov-text-color" type="color" value="#ffffff"></label></div>
-    <label>Background RGBA<input id="ov-text-bg" value="rgba(0, 0, 0, 0.55)"></label>
+    <div class="ov-row"><label>Background color<input id="ov-text-bg-color" type="color" value="#000000"></label><label>Background opacity <span id="ov-text-alpha-value">55%</span><input id="ov-text-alpha" type="range" min="0" max="100" value="55" oninput="updateOverlayAlphaLabel('text')"></label></div>
     <button class="ov-live" onclick="sendPanelOverlay('text',true)">Show / Update</button><button class="ov-clear" onclick="sendPanelOverlay('text',false)">Clear</button>
   </section>
 
@@ -42325,18 +42330,18 @@ isiSembulo
       const isFile = window.location.protocol === 'file:';
       const protocol = isFile ? 'http:' : (window.location.protocol || 'http:');
       let path = window.location.pathname || '/';
-      if (isFile) {
-        const parts = path.split('/');
-        const file = parts[parts.length - 1] || '';
-        path = file ? `/${file}` : '/';
-      }
-      const search = window.location.search || '';
+      const lastSlash = path.lastIndexOf('/');
+      const directory = isFile ? '/' : (lastSlash >= 0 ? path.slice(0, lastSlash + 1) : '/');
+      const displayPath = `${directory}BSP_display.html`;
+      const params = new URLSearchParams(window.location.search || '');
+      params.set('relayPort', getRelayPort());
+      params.set('pairCode', getRemoteShowPairCode());
       const hash = window.location.hash || '';
       const host = resolveShareUrlHost();
       if (!host) return '';
       const port = getHttpPort();
       const portSegment = port ? `:${port}` : '';
-      return `${protocol}//${host}${portSegment}${path}${search}${hash}`;
+      return `${protocol}//${host}${portSegment}${displayPath}?${params.toString()}${hash}`;
     }
 
     function buildRemoteShowQrPrimaryUrl(url) {
@@ -70975,6 +70980,19 @@ isiSembulo
       if (!wasOpen) menu.classList.add('open');
     }
     function overlayValue(id, fallback = '') { return document.getElementById(id)?.value ?? fallback; }
+    function overlayRgba(prefix) {
+      const hex = String(overlayValue(`ov-${prefix}-bg-color`, '#000000')).replace('#', '');
+      const full = hex.length === 3 ? hex.split('').map(ch => ch + ch).join('') : hex;
+      const red = parseInt(full.slice(0,2),16) || 0;
+      const green = parseInt(full.slice(2,4),16) || 0;
+      const blue = parseInt(full.slice(4,6),16) || 0;
+      const alpha = Math.max(0, Math.min(100, Number(overlayValue(`ov-${prefix}-alpha`, prefix === 'ticker' ? 72 : 55)))) / 100;
+      return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+    }
+    function updateOverlayAlphaLabel(prefix) {
+      const label = document.getElementById(`ov-${prefix}-alpha-value`);
+      if (label) label.textContent = `${overlayValue(`ov-${prefix}-alpha`, 0)}%`;
+    }
     function readOverlayFile(inputId) {
       const file = document.getElementById(inputId)?.files?.[0];
       if (!file) return Promise.resolve('');
@@ -70987,8 +71005,8 @@ isiSembulo
     }
     function sendPanelOverlay(name, enabled) {
       const data = { enabled };
-      if (name === 'ticker') Object.assign(data, { text: overlayValue('ov-ticker-text'), scale: Number(overlayValue('ov-ticker-scale',100)), speed: Number(overlayValue('ov-ticker-speed',18)), background: overlayValue('ov-ticker-bg') });
-      if (name === 'text') Object.assign(data, { text: overlayValue('ov-text-content'), x: Number(overlayValue('ov-text-x',50)), y: Number(overlayValue('ov-text-y',50)), scale: Number(overlayValue('ov-text-scale',100)), color: overlayValue('ov-text-color','#fff'), background: overlayValue('ov-text-bg') });
+      if (name === 'ticker') Object.assign(data, { text: overlayValue('ov-ticker-text'), scale: Number(overlayValue('ov-ticker-scale',100)), speed: Number(overlayValue('ov-ticker-speed',18)), color: overlayValue('ov-ticker-color','#fff'), background: overlayRgba('ticker') });
+      if (name === 'text') Object.assign(data, { text: overlayValue('ov-text-content'), x: Number(overlayValue('ov-text-x',50)), y: Number(overlayValue('ov-text-y',50)), scale: Number(overlayValue('ov-text-scale',100)), color: overlayValue('ov-text-color','#fff'), background: overlayRgba('text') });
       broadcastMessage({ type: 'OVERLAY_UPDATE', overlay: name, data });
     }
     async function sendImageOverlay(name, enabled) {
