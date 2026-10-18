@@ -4996,6 +4996,19 @@
       gap: 6px;
     }
 
+    .app-overlay-button { margin-left: 8px; background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer; }
+    .app-overlay-button:hover { color: var(--text); background: rgba(14,165,233,.15); }
+    .overlay-control-menu { display:none; position:fixed; z-index:10060; top:44px; right:12px; width:min(360px,calc(100vw - 24px)); padding:12px; border:1px solid var(--border,#334155); border-radius:10px; background:var(--bg-panel,#131923); color:var(--text,#edf2ff); box-shadow:0 8px 28px rgba(0,0,0,.4); font:12px/1.4 Arial,sans-serif; }
+    .overlay-control-menu.open { display:block; }
+    #overlay-menu-ticker, #overlay-menu-text { top:auto; bottom:46px; right:auto; left:12px; }
+    .overlay-control-menu h3 { margin:0 0 8px; font-size:13px; }
+    .overlay-control-menu textarea,.overlay-control-menu input,.overlay-control-menu select { box-sizing:border-box; width:100%; min-width:0; }
+    .overlay-control-menu textarea { height:56px; resize:vertical; }
+    .overlay-control-menu .ov-row { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:7px; }
+    .overlay-control-menu label { display:block; margin-top:6px; font-size:10px; color:var(--text-secondary,#a6afc2); }
+    .overlay-control-menu button { margin-top:8px; padding:6px 10px; border:0; border-radius:6px; cursor:pointer; font-weight:700; }
+    .ov-live { background:#2f6df6; color:white; } .ov-clear { background:#384152; color:white; margin-left:5px; }
+
     #app-topbar-settings:hover {
       background: rgba(14, 165, 233, 0.15);
       border-color: var(--accent);
@@ -15063,6 +15076,8 @@
       </svg>
       <span class="settings-footer-plugin">Bible Song<span class="settings-footer-pro">PRO</span></span>
     </div>
+    <button class="app-overlay-button" type="button" onclick="toggleOverlayMenu('media')">Media Overlay</button>
+    <button class="app-overlay-button" type="button" onclick="toggleOverlayMenu('logo')">Logo</button>
   </div>
 
 
@@ -16645,6 +16660,8 @@
     </button>
     <div class="page-nav-tool-left">
       <button class="page-nav-btn" id="footer-auto-lyrics-btn" type="button" onclick="openModal('autoLyricsModal')" data-i18n="auto_lyrics_get_lyrics">Get-Lyrics</button>
+      <button class="page-nav-btn" type="button" onclick="toggleOverlayMenu('ticker')">Ticker</button>
+      <button class="page-nav-btn" type="button" onclick="toggleOverlayMenu('text')">Text Overlay</button>
     </div>
     <div class="page-nav-primary" aria-label="Primary navigation">
       <button class="page-nav-btn active" data-side-tab="bible" onclick="switchBottomNavSidebarTab('bible')" data-i18n="ui_tab_bible">Bible</button>
@@ -16653,6 +16670,34 @@
     </div>
   </div>
   <div id="footer-bible-version-popover" aria-hidden="true"></div>
+  <section class="overlay-control-menu" id="overlay-menu-media" aria-label="Media overlay controls">
+    <h3>Media Overlay</h3>
+    <label>Image or video URL<input id="ov-media-url" type="url" placeholder="https://…"></label>
+    <label>Or choose a local image/video<input id="ov-media-file" type="file" accept="image/*,video/*"></label>
+    <div class="ov-row"><label>Left %<input id="ov-media-x" type="number" min="0" max="100" value="0"></label><label>Top %<input id="ov-media-y" type="number" min="0" max="100" value="0"></label></div>
+    <div class="ov-row"><label>Width %<input id="ov-media-w" type="number" min="5" max="100" value="100"></label><label>Opacity %<input id="ov-media-opacity" type="number" min="0" max="100" value="100"></label></div>
+    <button class="ov-live" onclick="sendMediaOverlay(true)">Show / Update</button><button class="ov-clear" onclick="sendPanelOverlay('media',false)">Clear</button>
+  </section>
+  <section class="overlay-control-menu" id="overlay-menu-logo" aria-label="Logo controls">
+    <h3>Logo Overlay</h3>
+    <label>Choose logo image<input id="ov-logo-file" type="file" accept="image/*"></label>
+    <div class="ov-row"><label>Left %<input id="ov-logo-x" type="number" min="0" max="100" value="82"></label><label>Top %<input id="ov-logo-y" type="number" min="0" max="100" value="5"></label></div>
+    <label>Width %<input id="ov-logo-w" type="number" min="2" max="50" value="12"></label>
+    <button class="ov-live" onclick="sendImageOverlay('logo',true)">Show / Update</button><button class="ov-clear" onclick="sendPanelOverlay('logo',false)">Clear</button>
+  </section>
+  <section class="overlay-control-menu" id="overlay-menu-ticker" aria-label="Ticker controls">
+    <h3>Ticker</h3><textarea id="ov-ticker-text" placeholder="Nursery is open in room 4 • Welcome!"></textarea>
+    <div class="ov-row"><label>Text size %<input id="ov-ticker-scale" type="number" min="50" max="250" value="100"></label><label>Scroll seconds<input id="ov-ticker-speed" type="number" min="6" max="60" value="18"></label></div>
+    <label>Background RGBA<input id="ov-ticker-bg" value="rgba(0, 0, 0, 0.72)"></label>
+    <button class="ov-live" onclick="sendPanelOverlay('ticker',true)">Show / Update</button><button class="ov-clear" onclick="sendPanelOverlay('ticker',false)">Clear</button>
+  </section>
+  <section class="overlay-control-menu" id="overlay-menu-text" aria-label="Text overlay controls">
+    <h3>Text Overlay</h3><textarea id="ov-text-content" placeholder="Enter on-screen text…"></textarea>
+    <div class="ov-row"><label>Left %<input id="ov-text-x" type="number" min="0" max="100" value="50"></label><label>Top %<input id="ov-text-y" type="number" min="0" max="100" value="50"></label></div>
+    <div class="ov-row"><label>Size %<input id="ov-text-scale" type="number" min="50" max="250" value="100"></label><label>Text color<input id="ov-text-color" type="color" value="#ffffff"></label></div>
+    <label>Background RGBA<input id="ov-text-bg" value="rgba(0, 0, 0, 0.55)"></label>
+    <button class="ov-live" onclick="sendPanelOverlay('text',true)">Show / Update</button><button class="ov-clear" onclick="sendPanelOverlay('text',false)">Clear</button>
+  </section>
 
   <!-- Auto Lyrics Modal -->
   <div id="autoLyricsModal" class="modal-overlay">
@@ -70918,6 +70963,46 @@ isiSembulo
       } catch(_) {}
       saveToStorageDebounced();
     }
+  </script>
+  <script>
+    let ewMediaDataUrl = '';
+    let ewLogoDataUrl = '';
+    function toggleOverlayMenu(name) {
+      const menu = document.getElementById(`overlay-menu-${name}`);
+      if (!menu) return;
+      const wasOpen = menu.classList.contains('open');
+      document.querySelectorAll('.overlay-control-menu.open').forEach(el => el.classList.remove('open'));
+      if (!wasOpen) menu.classList.add('open');
+    }
+    function overlayValue(id, fallback = '') { return document.getElementById(id)?.value ?? fallback; }
+    function readOverlayFile(inputId) {
+      const file = document.getElementById(inputId)?.files?.[0];
+      if (!file) return Promise.resolve('');
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ''));
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+    function sendPanelOverlay(name, enabled) {
+      const data = { enabled };
+      if (name === 'ticker') Object.assign(data, { text: overlayValue('ov-ticker-text'), scale: Number(overlayValue('ov-ticker-scale',100)), speed: Number(overlayValue('ov-ticker-speed',18)), background: overlayValue('ov-ticker-bg') });
+      if (name === 'text') Object.assign(data, { text: overlayValue('ov-text-content'), x: Number(overlayValue('ov-text-x',50)), y: Number(overlayValue('ov-text-y',50)), scale: Number(overlayValue('ov-text-scale',100)), color: overlayValue('ov-text-color','#fff'), background: overlayValue('ov-text-bg') });
+      broadcastMessage({ type: 'OVERLAY_UPDATE', overlay: name, data });
+    }
+    async function sendImageOverlay(name, enabled) {
+      const fileId = name === 'logo' ? 'ov-logo-file' : 'ov-media-file';
+      try {
+        const uploaded = await readOverlayFile(fileId);
+        if (uploaded) name === 'logo' ? ewLogoDataUrl = uploaded : ewMediaDataUrl = uploaded;
+        const src = name === 'logo' ? ewLogoDataUrl : (ewMediaDataUrl || overlayValue('ov-media-url'));
+        broadcastMessage({ type:'OVERLAY_UPDATE', overlay:name, data:{ enabled, src,
+          x:Number(overlayValue(`ov-${name}-x`,name==='logo'?82:0)), y:Number(overlayValue(`ov-${name}-y`,name==='logo'?5:0)),
+          width:Number(overlayValue(`ov-${name}-w`,name==='logo'?12:100)), opacity:Number(overlayValue('ov-media-opacity',100)) } });
+      } catch (_) { alert('Could not read the selected image or video.'); }
+    }
+    async function sendMediaOverlay(enabled) { await sendImageOverlay('media', enabled); }
   </script>
   <style id="obs-isolated-mode-style">
     body.obs-isolated #activity-bar .ab-btn:not(#ab-sidebar-toggle):not(#ab-song):not(#ab-bible):not(#ab-schedule):not(#ab-settings) {

@@ -178,6 +178,14 @@
       will-change: transform, opacity;
     }
 
+    .bsp-overlay-layer { position:absolute; z-index:30; pointer-events:none; display:none; }
+    #media-overlay, #media-video-overlay, #logo-overlay { object-fit:contain; }
+    #text-overlay { transform:translate(-50%,-50%); max-width:90vw; padding:.22em .5em; border-radius:.15em; font-weight:800; text-align:center; line-height:1.15; text-shadow:1px 2px 5px rgba(0,0,0,.8); white-space:pre-wrap; overflow-wrap:anywhere; }
+    #ticker-overlay { display:none; position:absolute; z-index:30; left:0; right:0; bottom:0; width:100%; height:9%; overflow:hidden; white-space:nowrap; padding:.22em 0; color:#fff; font-size:4.8vh; font-weight:800; line-height:1.2; text-shadow:1px 2px 4px rgba(0,0,0,.8); pointer-events:none; align-items:center; }
+    #ticker-track { display:inline-block; padding-left:0; animation:ticker-scroll 18s linear infinite; }
+    body.ticker-active #display-container { height:91%; }
+    @keyframes ticker-scroll { to { transform:translateX(-100%); } }
+
 
     #custom-lt-ref-box {
       position: absolute;
@@ -629,6 +637,11 @@
   <div id="custom-lt-ref-box" class="hardware-accelerated"></div>
   <div id="custom-lt-version-bar" class="hardware-accelerated"></div>
   <div id="custom-lt-main-bar" class="hardware-accelerated"></div>
+  <img id="media-overlay" class="bsp-overlay-layer" alt="">
+  <video id="media-video-overlay" class="bsp-overlay-layer" muted autoplay loop playsinline></video>
+  <img id="logo-overlay" class="bsp-overlay-layer" alt="Logo">
+  <div id="text-overlay" class="bsp-overlay-layer"></div>
+  <div id="ticker-overlay" aria-live="polite"><div id="ticker-track"></div></div>
   <div id="display-container" class="mode-full">
     <div id="text-container" class="hardware-accelerated"></div>
   </div>
@@ -924,10 +937,57 @@
       };
     }
 
+    function renderOverlay(name, data = {}) {
+      const clampPct = (value, fallback = 0) => clamp(Number.isFinite(Number(value)) ? Number(value) : fallback, 0, 100);
+      if (name === 'ticker') {
+        const overlay = document.getElementById('ticker-overlay');
+        const track = document.getElementById('ticker-track');
+        if (!data.enabled || !String(data.text || '').trim()) {
+          overlay.style.display = 'none'; document.body.classList.remove('ticker-active'); return;
+        }
+        track.textContent = String(data.text);
+        track.style.fontSize = `${clamp(Number(data.scale) || 100, 50, 250) * 0.048}vh`;
+        track.style.animationDuration = `${clamp(Number(data.speed) || 18, 6, 60)}s`;
+        track.style.paddingLeft = `${clampPct(data.x, 0)}%`;
+        overlay.style.backgroundColor = /^rgba?\(/i.test(data.background || '') ? data.background : 'rgba(0,0,0,.72)';
+        overlay.style.display = 'flex'; document.body.classList.add('ticker-active'); return;
+      }
+      if (name === 'text') {
+        const el = document.getElementById('text-overlay');
+        if (!data.enabled || !String(data.text || '').trim()) { el.style.display = 'none'; return; }
+        el.textContent = String(data.text);
+        el.style.left = `${clampPct(data.x,50)}%`; el.style.top = `${clampPct(data.y,50)}%`;
+        el.style.fontSize = `${clamp(Number(data.scale) || 100,50,250) * 0.048}vh`;
+        el.style.color = /^#[0-9a-f]{3,8}$/i.test(data.color || '') ? data.color : '#fff';
+        el.style.backgroundColor = /^rgba?\(/i.test(data.background || '') ? data.background : 'transparent';
+        el.style.display = 'block'; return;
+      }
+      if (name === 'logo' || name === 'media') {
+        const img = document.getElementById(name === 'logo' ? 'logo-overlay' : 'media-overlay');
+        const video = document.getElementById('media-video-overlay');
+        if (!data.enabled || !data.src) {
+          img.style.display = 'none';
+          if (name === 'media') { video.pause(); video.removeAttribute('src'); video.load(); video.style.display = 'none'; }
+          return;
+        }
+        const isVideo = name === 'media' && (/^data:video\//i.test(data.src) || /\.(mp4|webm|ogg)(?:$|[?#])/i.test(data.src));
+        const el = isVideo ? video : img;
+        if (name === 'media') { video.style.display = 'none'; img.style.display = 'none'; }
+        el.src = data.src;
+        el.style.left = `${clampPct(data.x)}%`; el.style.top = `${clampPct(data.y)}%`;
+        el.style.width = `${clamp(Number(data.width) || (name === 'logo' ? 12 : 100), 2, 100)}%`;
+        el.style.opacity = String(clamp(Number(data.opacity ?? 100),0,100) / 100);
+        el.style.display = 'block';
+      }
+    }
+
     function handleInboundMessage(d, source) {
       debug(`MSG(${source}): ` + (d.type || 'unknown') + (d.text ? ' — ' + (String(d.text).slice(0,80)) : ''));
       try {
         switch (d.type) {
+          case 'OVERLAY_UPDATE':
+            renderOverlay(d.overlay, d.data || {});
+            break;
           case 'PING': {
             const pong = { type: 'PONG' };
             if (source === 'relay') relaySend(pong);
