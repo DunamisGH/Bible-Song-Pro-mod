@@ -190,7 +190,10 @@
     .ticker-copy { flex:none; white-space:pre; }
     body #display-container { transition:height .32s ease; }
     body.ticker-active #display-container { height:91%; }
-    @keyframes ticker-scroll { to { transform:translateY(-50%) translateX(var(--ticker-shift, -500px)); } }
+    @keyframes ticker-scroll {
+      from { transform:translate3d(0, -50%, 0); }
+      to { transform:translate3d(var(--ticker-shift, -500px), -50%, 0); }
+    }
 
 
     #custom-lt-ref-box {
