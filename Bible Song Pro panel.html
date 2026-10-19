@@ -18702,6 +18702,7 @@
     let preserveLtBgWhenSwitchingToSongs = false;
     let delayBibleBgUntilVerse = false;
     let songBgUserOn = false;
+    let bibleBgUserOverride = null;
     let lastBibleSelectionBeforeSchedule = null;
     let scheduleReturnTarget = null;
     const SEARCH_TABS = ['songs', 'bible', 'schedule'];
@@ -42810,6 +42811,7 @@ isiSembulo
       const bgToggle = document.getElementById('bg-toggle');
       if (!bgToggle) return false;
       if (tab === 'songs' && songBgUserOn) return false;
+      if (tab === 'bible' && bibleBgUserOverride !== null) return false;
       const desired = (tab === 'bible');
       if (bgToggle.checked === desired) return false;
       bgToggle.checked = desired;
@@ -42862,6 +42864,7 @@ isiSembulo
       if (bgToggle && !bgToggle.checked) {
         bgToggle.checked = true;
         if (sidebarTab === 'songs' && activeRatio === '16-9') songBgUserOn = true;
+        if (getEffectiveContentTab() === 'bible' && activeRatio === '16-9') bibleBgUserOverride = true;
       }
       setBgMode(mode);
       updateBgModePicker();
@@ -42873,6 +42876,7 @@ isiSembulo
       if (on === undefined) on = !bgToggle.checked;
       bgToggle.checked = on;
       if (sidebarTab === 'songs' && activeRatio === '16-9') songBgUserOn = on;
+      if (getEffectiveContentTab() === 'bible' && activeRatio === '16-9') bibleBgUserOverride = on;
       updateBgModePicker();
       onAnyControlChange();
     }
@@ -66569,7 +66573,6 @@ isiSembulo
         document.getElementById('ratio-full').classList.add('active');
         document.getElementById('ratio-lt').classList.remove('active');
         document.getElementById('ratio-custom').classList.remove('active');
-        document.getElementById('bg-toggle').checked = true;
         syncBgOpacitySlider();
       }
       const isScheduleItem = isCurrentItemFromScheduleList();
