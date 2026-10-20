@@ -2,6 +2,7 @@
 """Start the Bible Song Pro LAN server and configure Tailscale Funnel."""
 
 import shutil
+import socket
 import subprocess
 import sys
 import time
@@ -13,12 +14,30 @@ FUNNEL_ROUTES = (
     ("443", "http://127.0.0.1:8000"),
     ("10000", "http://127.0.0.1:5511"),
 )
+LOCAL_PORTS = (8000, 5511)
+
+
+def find_busy_ports() -> list[int]:
+    busy = []
+    for port in LOCAL_PORTS:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
+            probe.settimeout(0.25)
+            if probe.connect_ex(("127.0.0.1", port)) == 0:
+                busy.append(port)
+    return busy
 
 
 def main() -> int:
     tailscale = shutil.which("tailscale") or shutil.which("tailscale.exe")
     if not tailscale:
         print("Error: Tailscale CLI was not found. Install/start Tailscale, then try again.")
+        return 1
+
+    busy_ports = find_busy_ports()
+    if busy_ports:
+        ports = ", ".join(str(port) for port in busy_ports)
+        print(f"Error: local port(s) {ports} are already in use.")
+        print("Close any other Bible Song Pro server window (for example, start_lan.bat), then try again.")
         return 1
 
     server = subprocess.Popen(
