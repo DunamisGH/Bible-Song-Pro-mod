@@ -10,6 +10,19 @@ Windows:
 py -3 lan_server.py
 ```
 
+To start the server and configure Tailscale Funnel for internet access, run:
+
+```bat
+start_funnel.bat
+```
+
+This exposes the web page on Funnel HTTPS port `443` and the WebSocket relay on
+port `10000`. In Bible Song Pro's Remote Show settings, use port `443` and relay
+port `10000`. The Funnel routes are configured in Tailscale background mode;
+stopping this launcher stops the local app server, but leaves the routes configured.
+Turn those routes off with `tailscale funnel --https=443 off` and
+`tailscale funnel --https=10000 off`.
+
 or:
 
 ```bat
