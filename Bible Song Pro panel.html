@@ -4996,22 +4996,29 @@
       gap: 6px;
     }
 
-    .app-overlay-button { margin-left: 8px; background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer; }
-    .app-overlay-button:hover { color: var(--text); background: rgba(14,165,233,.15); }
-    .overlay-control-menu { display:block; visibility:hidden; opacity:0; transform:translateY(-8px) scale(.98); pointer-events:none; position:fixed; z-index:10060; top:44px; right:12px; width:min(360px,calc(100vw - 24px)); padding:12px; border:1px solid var(--border,#334155); border-radius:10px; background:var(--bg-panel,#131923); color:var(--text,#edf2ff); box-shadow:0 8px 28px rgba(0,0,0,.4); font:12px/1.4 Arial,sans-serif; transition:opacity .2s ease, transform .2s ease, visibility 0s linear .2s; }
-    .overlay-control-menu.open { visibility:visible; opacity:1; transform:translateY(0) scale(1); pointer-events:auto; transition-delay:0s; }
-    #overlay-menu-ticker, #overlay-menu-text { top:auto; bottom:46px; right:auto; left:12px; transform:translateY(8px) scale(.98); }
-    #overlay-menu-ticker.open, #overlay-menu-text.open { transform:translateY(0) scale(1); }
-    .overlay-control-menu h3 { margin:0 0 8px; font-size:13px; }
-    .overlay-control-menu textarea,.overlay-control-menu input,.overlay-control-menu select { box-sizing:border-box; width:100%; min-width:0; }
-    .overlay-control-menu textarea { height:56px; resize:vertical; }
+    #overlay-sidebar-panel { flex:0 0 clamp(210px, 22vw, 280px); width:clamp(210px, 22vw, 280px); min-width:0; min-height:0; overflow-y:auto; padding:10px; border-left:1px solid var(--border); background:var(--bg-panel); color:var(--text); scrollbar-width:thin; }
+    .overlay-panel-heading { display:flex; align-items:center; justify-content:space-between; margin:0 0 7px; color:var(--text-secondary); font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .overlay-control-menu { display:block; width:100%; box-sizing:border-box; margin:5px 0; padding:0 9px 9px; border:1px solid var(--border); border-radius:8px; background:var(--bg,#131923); color:var(--text,#edf2ff); font:12px/1.4 'Inter','Segoe UI',system-ui,sans-serif; }
+    .overlay-control-menu > summary { padding:9px 0; cursor:pointer; list-style:none; font-size:12px; font-weight:700; }
+    .overlay-control-menu > summary::-webkit-details-marker { display:none; }
+    .overlay-control-menu > summary::after { content:'+'; float:right; color:var(--text-secondary); }
+    .overlay-control-menu[open] > summary::after { content:'-'; }
+    .overlay-control-menu textarea,.overlay-control-menu input,.overlay-control-menu select { box-sizing:border-box; width:100%; min-width:0; accent-color:var(--accent); }
+    .overlay-control-menu textarea { height:54px; resize:vertical; padding:7px; border:1px solid var(--border); border-radius:6px; background:var(--bg-panel); color:var(--text); font:inherit; }
+    .overlay-control-menu input:not([type="color"]):not([type="range"]):not([type="file"]) { padding:6px 7px; border:1px solid var(--border); border-radius:6px; background:var(--bg-panel); color:var(--text); }
+    .overlay-control-menu input[type="file"] { font-size:10px; color:var(--text-secondary); }
     .overlay-control-menu .ov-row { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:7px; }
-    .overlay-control-menu .ov-color-row { display:grid; grid-template-columns:auto 1fr; align-items:center; gap:10px; margin-top:8px; }
-    .overlay-control-menu .ov-color-row input[type="color"] { width:40px; height:28px; padding:2px; }
-    .overlay-control-menu .ov-color-row input[type="range"] { width:100%; }
-    .overlay-control-menu label { display:block; margin-top:6px; font-size:10px; color:var(--text-secondary,#a6afc2); }
-    .overlay-control-menu button { margin-top:8px; padding:6px 10px; border:0; border-radius:6px; cursor:pointer; font-weight:700; }
-    .ov-live { background:#2f6df6; color:white; } .ov-clear { background:#384152; color:white; margin-left:5px; }
+    .overlay-control-menu .ov-color-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:7px; }
+    .overlay-control-menu .ov-color-row input[type="color"] { width:100%; height:30px; padding:2px; border:1px solid var(--border); border-radius:6px; background:var(--bg-panel); }
+    .overlay-control-menu label { display:block; min-width:0; margin-top:6px; font-size:10px; color:var(--text-secondary); }
+    .ov-range-head { display:flex; justify-content:space-between; gap:8px; }
+    .ov-actions { display:flex; gap:7px; margin-top:9px; }
+    .overlay-control-menu button { flex:1; min-height:30px; padding:6px 10px; border:1px solid transparent; border-radius:6px; cursor:pointer; font:600 11px inherit; }
+    .ov-live { background:var(--accent,#2f6df6); color:#fff; } .ov-live:hover { filter:brightness(1.1); }
+    .ov-clear { background:var(--bg-panel); border-color:var(--border)!important; color:var(--text-secondary); }
+    .ov-clear:hover { color:var(--danger,#ef4444); border-color:var(--danger,#ef4444)!important; }
+    @media (max-width:900px) { #overlay-sidebar-panel { flex-basis:220px; width:220px; padding:8px; } .overlay-control-menu .ov-row { gap:5px; } }
+    @media (max-width:680px) { #overlay-sidebar-panel { flex-basis:190px; width:190px; padding:6px; } }
 
     #app-topbar-settings:hover {
       background: rgba(14, 165, 233, 0.15);
@@ -15080,8 +15087,6 @@
       </svg>
       <span class="settings-footer-plugin">Bible Song<span class="settings-footer-pro">PRO</span></span>
     </div>
-    <button class="app-overlay-button" type="button" onclick="toggleOverlayMenu('media')">Media Overlay</button>
-    <button class="app-overlay-button" type="button" onclick="toggleOverlayMenu('logo')">Logo</button>
   </div>
 
 
@@ -15129,6 +15134,7 @@
 
       <div id="version-bar"></div>
       <div id="song-list"></div>
+
     </div>
     <div id="sidebar-width-handle"><div class="grip"></div></div>
     <button type="button" id="sidebar-quick-actions-btn" aria-label="Quick actions" data-i18n-aria-label="ui_quick_actions" title="Quick actions" data-i18n-title="ui_quick_actions" onclick="toggleSidebarQuickActions()"><span>Quick</span></button>
@@ -16152,6 +16158,13 @@
       </div>
     </div>
     </div>
+    <aside id="overlay-sidebar-panel" aria-label="On-screen overlays">
+        <div class="overlay-panel-heading">On-screen overlays</div>
+        <details class="overlay-control-menu" id="overlay-menu-ticker"><summary>Ticker</summary><textarea id="ov-ticker-text" placeholder="Nursery is open in room 4 - Welcome!"></textarea><div class="ov-row"><label>Text size (%)<input id="ov-ticker-scale" type="number" min="50" max="250" value="100"></label><label>Scroll speed (sec)<input id="ov-ticker-speed" type="number" min="6" max="60" value="18"></label></div><div class="ov-color-row"><label>Text color<input id="ov-ticker-color" type="color" value="#ffffff"></label><label>Background color<input id="ov-ticker-bg-color" type="color" value="#000000"></label></div><label><span class="ov-range-head"><span>Background opacity</span><span id="ov-ticker-alpha-value">72%</span></span><input id="ov-ticker-alpha" type="range" min="0" max="100" value="72" oninput="updateOverlayAlphaLabel('ticker')"></label><div class="ov-actions"><button class="ov-live" type="button" onclick="sendPanelOverlay('ticker',true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('ticker',false)">Clear</button></div></details>
+        <details class="overlay-control-menu" id="overlay-menu-text"><summary>Text overlay</summary><textarea id="ov-text-content" placeholder="Enter on-screen text..."></textarea><div class="ov-row"><label>Horizontal position (%)<input id="ov-text-x" type="number" min="0" max="100" value="50"></label><label>Vertical position (%)<input id="ov-text-y" type="number" min="0" max="100" value="50"></label></div><div class="ov-row"><label>Text size (%)<input id="ov-text-scale" type="number" min="50" max="250" value="100"></label><label>Text color<input id="ov-text-color" type="color" value="#ffffff"></label></div><div class="ov-color-row"><label>Background color<input id="ov-text-bg-color" type="color" value="#000000"></label><label><span class="ov-range-head"><span>Background opacity</span><span id="ov-text-alpha-value">55%</span></span><input id="ov-text-alpha" type="range" min="0" max="100" value="55" oninput="updateOverlayAlphaLabel('text')"></label></div><div class="ov-actions"><button class="ov-live" type="button" onclick="sendPanelOverlay('text',true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('text',false)">Clear</button></div></details>
+        <details class="overlay-control-menu" id="overlay-menu-media"><summary>Media overlay</summary><label>Image or video URL<input id="ov-media-url" type="url" placeholder="https://example.com/media.png"></label><label>Choose local image or video<input id="ov-media-file" type="file" accept="image/*,video/*"></label><div class="ov-row"><label>Horizontal position (%)<input id="ov-media-x" type="number" min="0" max="100" value="0"></label><label>Vertical position (%)<input id="ov-media-y" type="number" min="0" max="100" value="0"></label></div><div class="ov-row"><label>Width (%)<input id="ov-media-w" type="number" min="5" max="100" value="100"></label><label><span class="ov-range-head"><span>Opacity</span><span id="ov-media-opacity-value">100%</span></span><input id="ov-media-opacity" type="range" min="0" max="100" value="100" oninput="updateOverlayAlphaLabel('media-opacity')"></label></div><div class="ov-actions"><button class="ov-live" type="button" onclick="sendMediaOverlay(true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('media',false)">Clear</button></div></details>
+        <details class="overlay-control-menu" id="overlay-menu-logo"><summary>Logo</summary><label>Choose logo image<input id="ov-logo-file" type="file" accept="image/*"></label><div class="ov-row"><label>Horizontal position (%)<input id="ov-logo-x" type="number" min="0" max="100" value="82"></label><label>Vertical position (%)<input id="ov-logo-y" type="number" min="0" max="100" value="5"></label></div><div class="ov-row"><label>Width (%)<input id="ov-logo-w" type="number" min="2" max="50" value="12"></label><label><span class="ov-range-head"><span>Opacity</span><span id="ov-logo-opacity-value">100%</span></span><input id="ov-logo-opacity" type="range" min="0" max="100" value="100" oninput="updateOverlayAlphaLabel('logo-opacity')"></label></div><div class="ov-actions"><button class="ov-live" type="button" onclick="sendImageOverlay('logo',true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('logo',false)">Clear</button></div></details>
+    </aside>
     <div id="program-width-handle" style="display:none;"><div class="grip"></div></div>
     <aside id="program-display-panel" style="display:none;" aria-hidden="true">
       <div class="program-display-header">
@@ -16664,8 +16677,6 @@
     </button>
     <div class="page-nav-tool-left">
       <button class="page-nav-btn" id="footer-auto-lyrics-btn" type="button" onclick="openModal('autoLyricsModal')" data-i18n="auto_lyrics_get_lyrics">Get-Lyrics</button>
-      <button class="page-nav-btn" type="button" onclick="toggleOverlayMenu('ticker')">Ticker</button>
-      <button class="page-nav-btn" type="button" onclick="toggleOverlayMenu('text')">Text Overlay</button>
     </div>
     <div class="page-nav-primary" aria-label="Primary navigation">
       <button class="page-nav-btn active" data-side-tab="bible" onclick="switchBottomNavSidebarTab('bible')" data-i18n="ui_tab_bible">Bible</button>
@@ -16674,36 +16685,6 @@
     </div>
   </div>
   <div id="footer-bible-version-popover" aria-hidden="true"></div>
-  <section class="overlay-control-menu" id="overlay-menu-media" aria-label="Media overlay controls">
-    <h3>Media Overlay</h3>
-    <label>Image or video URL<input id="ov-media-url" type="url" placeholder="https://…"></label>
-    <label>Or choose a local image/video<input id="ov-media-file" type="file" accept="image/*,video/*"></label>
-    <div class="ov-row"><label>Left %<input id="ov-media-x" type="number" min="0" max="100" value="0"></label><label>Top %<input id="ov-media-y" type="number" min="0" max="100" value="0"></label></div>
-    <div class="ov-row"><label>Width %<input id="ov-media-w" type="number" min="5" max="100" value="100"></label><label>Opacity %<input id="ov-media-opacity" type="number" min="0" max="100" value="100"></label></div>
-    <button class="ov-live" onclick="sendMediaOverlay(true)">Show / Update</button><button class="ov-clear" onclick="sendPanelOverlay('media',false)">Clear</button>
-  </section>
-  <section class="overlay-control-menu" id="overlay-menu-logo" aria-label="Logo controls">
-    <h3>Logo Overlay</h3>
-    <label>Choose logo image<input id="ov-logo-file" type="file" accept="image/*"></label>
-    <div class="ov-row"><label>Left %<input id="ov-logo-x" type="number" min="0" max="100" value="82"></label><label>Top %<input id="ov-logo-y" type="number" min="0" max="100" value="5"></label></div>
-    <label>Width %<input id="ov-logo-w" type="number" min="2" max="50" value="12"></label>
-    <button class="ov-live" onclick="sendImageOverlay('logo',true)">Show / Update</button><button class="ov-clear" onclick="sendPanelOverlay('logo',false)">Clear</button>
-  </section>
-  <section class="overlay-control-menu" id="overlay-menu-ticker" aria-label="Ticker controls">
-    <h3>Ticker</h3><textarea id="ov-ticker-text" placeholder="Nursery is open in room 4 • Welcome!"></textarea>
-    <div class="ov-row"><label>Text size %<input id="ov-ticker-scale" type="number" min="50" max="250" value="100"></label><label>Scroll seconds<input id="ov-ticker-speed" type="number" min="6" max="60" value="18"></label></div>
-    <div class="ov-row"><label>Text color<input id="ov-ticker-color" type="color" value="#ffffff"></label><label>Background color<input id="ov-ticker-bg-color" type="color" value="#000000"></label></div>
-    <label>Background opacity <span id="ov-ticker-alpha-value">72%</span><input id="ov-ticker-alpha" type="range" min="0" max="100" value="72" oninput="updateOverlayAlphaLabel('ticker')"></label>
-    <button class="ov-live" onclick="sendPanelOverlay('ticker',true)">Show / Update</button><button class="ov-clear" onclick="sendPanelOverlay('ticker',false)">Clear</button>
-  </section>
-  <section class="overlay-control-menu" id="overlay-menu-text" aria-label="Text overlay controls">
-    <h3>Text Overlay</h3><textarea id="ov-text-content" placeholder="Enter on-screen text…"></textarea>
-    <div class="ov-row"><label>Left %<input id="ov-text-x" type="number" min="0" max="100" value="50"></label><label>Top %<input id="ov-text-y" type="number" min="0" max="100" value="50"></label></div>
-    <div class="ov-row"><label>Size %<input id="ov-text-scale" type="number" min="50" max="250" value="100"></label><label>Text color<input id="ov-text-color" type="color" value="#ffffff"></label></div>
-    <div class="ov-row"><label>Background color<input id="ov-text-bg-color" type="color" value="#000000"></label><label>Background opacity <span id="ov-text-alpha-value">55%</span><input id="ov-text-alpha" type="range" min="0" max="100" value="55" oninput="updateOverlayAlphaLabel('text')"></label></div>
-    <button class="ov-live" onclick="sendPanelOverlay('text',true)">Show / Update</button><button class="ov-clear" onclick="sendPanelOverlay('text',false)">Clear</button>
-  </section>
-
   <!-- Auto Lyrics Modal -->
   <div id="autoLyricsModal" class="modal-overlay">
     <div class="modal-content" style="width:min(50vw,700px);max-height:86vh;padding:16px 16px 14px;display:flex;flex-direction:column;gap:10px;overflow:hidden">
@@ -70975,13 +70956,6 @@ isiSembulo
   <script>
     let ewMediaDataUrl = '';
     let ewLogoDataUrl = '';
-    function toggleOverlayMenu(name) {
-      const menu = document.getElementById(`overlay-menu-${name}`);
-      if (!menu) return;
-      const wasOpen = menu.classList.contains('open');
-      document.querySelectorAll('.overlay-control-menu.open').forEach(el => el.classList.remove('open'));
-      if (!wasOpen) menu.classList.add('open');
-    }
     function overlayValue(id, fallback = '') { return document.getElementById(id)?.value ?? fallback; }
     function overlayRgba(prefix) {
       const hex = String(overlayValue(`ov-${prefix}-bg-color`, '#000000')).replace('#', '');
@@ -70993,8 +70967,10 @@ isiSembulo
       return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
     }
     function updateOverlayAlphaLabel(prefix) {
-      const label = document.getElementById(`ov-${prefix}-alpha-value`);
-      if (label) label.textContent = `${overlayValue(`ov-${prefix}-alpha`, 0)}%`;
+      const isOverlayOpacity = prefix.endsWith('-opacity');
+      const label = document.getElementById(isOverlayOpacity ? `ov-${prefix}-value` : `ov-${prefix}-alpha-value`);
+      const inputId = isOverlayOpacity ? `ov-${prefix}` : `ov-${prefix}-alpha`;
+      if (label) label.textContent = `${overlayValue(inputId, 0)}%`;
     }
     function readOverlayFile(inputId) {
       const file = document.getElementById(inputId)?.files?.[0];
@@ -71020,7 +70996,7 @@ isiSembulo
         const src = name === 'logo' ? ewLogoDataUrl : (ewMediaDataUrl || overlayValue('ov-media-url'));
         broadcastMessage({ type:'OVERLAY_UPDATE', overlay:name, data:{ enabled, src,
           x:Number(overlayValue(`ov-${name}-x`,name==='logo'?82:0)), y:Number(overlayValue(`ov-${name}-y`,name==='logo'?5:0)),
-          width:Number(overlayValue(`ov-${name}-w`,name==='logo'?12:100)), opacity:Number(overlayValue('ov-media-opacity',100)) } });
+          width:Number(overlayValue(`ov-${name}-w`,name==='logo'?12:100)), opacity:Number(overlayValue(`ov-${name}-opacity`,100)) } });
       } catch (_) { alert('Could not read the selected image or video.'); }
     }
     async function sendMediaOverlay(enabled) { await sendImageOverlay('media', enabled); }

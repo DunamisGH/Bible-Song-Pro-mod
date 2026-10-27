@@ -43,3 +43,18 @@ The display page will automatically try to connect to the same host over WebSock
 - The relay is intentionally minimal and designed for local network use.
 - If you load the display using `localhost`, it will default to `127.0.0.1`, which only works on the same machine.
 - To use another device on the LAN, open the page via the server's LAN IP address.
+
+## Copyright Disclaimer
+
+© 2026 DunamisGH. All rights reserved.
+
+This software is provided "as is", without warranty of any kind, express or
+implied, including but not limited to the warranties of merchantability,
+fitness for a particular purpose, and noninfringement. In no event shall the
+authors or copyright holders be liable for any claim, damages, or other
+liability, whether in an action of contract, tort, or otherwise, arising from,
+out of, or in connection with the software or the use or other dealings in the
+software.
+
+This project is not affiliated with or endorsed by any commercial Bible Song
+Pro product or its developers.
