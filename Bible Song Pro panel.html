@@ -5006,6 +5006,22 @@
     .overlay-control-menu > summary::-webkit-details-marker { display:none; }
     .overlay-control-menu > summary::after { content:'+'; color:var(--accent-light,var(--accent)); font-size:15px; font-weight:600; }
     .overlay-control-menu[open] > summary::after { content:'−'; }
+    @supports (interpolate-size: allow-keywords) and selector(details::details-content) {
+      #overlay-sidebar-panel { interpolate-size: allow-keywords; }
+      .overlay-control-menu::details-content {
+        height: 0;
+        opacity: 0;
+        overflow: clip;
+        transition: height 0.2s ease, opacity 0.16s ease, content-visibility 0.2s allow-discrete;
+      }
+      .overlay-control-menu[open]::details-content {
+        height: auto;
+        opacity: 1;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .overlay-control-menu::details-content { transition-duration: 0s; }
+    }
     .overlay-control-menu textarea,.overlay-control-menu input,.overlay-control-menu select { box-sizing:border-box; width:100%; min-width:0; accent-color:var(--accent); }
     .overlay-control-menu textarea { height:54px; resize:vertical; padding:7px; border:1px solid var(--border); border-radius:6px; background:var(--bg-panel); color:var(--text); font:inherit; }
     .overlay-control-menu input:not([type="color"]):not([type="range"]):not([type="file"]) { padding:6px 7px; border:1px solid var(--border); border-radius:6px; background:var(--bg-panel); color:var(--text); }
