@@ -68134,7 +68134,7 @@ isiSembulo
         return `bible:${entry.version || ''}:${entry.title || ''}:${entry.content || ''}`;
       }
       if (entry._metaKind === 'ticker_set') {
-        return `ticker:${entry.title || ''}:${entry.content || ''}:${entry.scale || ''}:${entry.speed || ''}:${entry.color || ''}:${entry.background || ''}`;
+        return `ticker:${entry.title || ''}:${entry.text || entry.content || ''}`;
       }
       if (entry.id) {
         return `song:${entry.id}`;
@@ -71043,12 +71043,6 @@ isiSembulo
     function loadTickerSetToSidebar(entry) {
       document.getElementById('ov-ticker-set-name').value = entry.title || '';
       document.getElementById('ov-ticker-text').value = entry.text || entry.content || '';
-      document.getElementById('ov-ticker-scale').value = entry.scale || 100;
-      document.getElementById('ov-ticker-speed').value = entry.speed || 18;
-      document.getElementById('ov-ticker-color').value = entry.color || '#ffffff';
-      document.getElementById('ov-ticker-bg-color').value = entry.backgroundColor || '#000000';
-      document.getElementById('ov-ticker-alpha').value = entry.backgroundOpacity ?? 72;
-      updateOverlayAlphaLabel('ticker');
     }
     function addTickerToSetlist() {
       const text = overlayValue('ov-ticker-text').trim();
@@ -71061,31 +71055,15 @@ isiSembulo
         _metaKind: 'ticker_set',
         title,
         content: text,
-        text,
-        scale: Number(overlayValue('ov-ticker-scale', 100)),
-        speed: Number(overlayValue('ov-ticker-speed', 18)),
-        color: overlayValue('ov-ticker-color', '#ffffff'),
-        backgroundColor: overlayValue('ov-ticker-bg-color', '#000000'),
-        backgroundOpacity: Number(overlayValue('ov-ticker-alpha', 72)),
-        background: overlayRgba('ticker')
+        text
       }, {
         successMessage: 'Ticker set added to setlist',
         duplicateMessage: 'Ticker set already exists; moved to the top'
       });
     }
     function sendTickerSetLive(entry) {
-      broadcastMessage({
-        type: 'OVERLAY_UPDATE',
-        overlay: 'ticker',
-        data: {
-          enabled: true,
-          text: entry.text || entry.content || '',
-          scale: Number(entry.scale) || 100,
-          speed: Number(entry.speed) || 18,
-          color: entry.color || '#ffffff',
-          background: entry.background || 'rgba(0, 0, 0, 0.72)'
-        }
-      });
+      document.getElementById('ov-ticker-text').value = entry.text || entry.content || '';
+      sendPanelOverlay('ticker', true);
     }
     async function sendImageOverlay(name, enabled) {
       const fileId = name === 'logo' ? 'ov-logo-file' : 'ov-media-file';
