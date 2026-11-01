@@ -16179,7 +16179,16 @@
     </div>
     <aside id="overlay-sidebar-panel" aria-label="On-screen overlays">
         <div class="overlay-panel-heading">On-screen overlays</div>
-        <details class="overlay-control-menu" id="overlay-menu-ticker"><summary>Ticker</summary><textarea id="ov-ticker-text" placeholder="Nursery is open in room 4 - Welcome!"></textarea><div class="ov-row"><label>Text size (%)<input id="ov-ticker-scale" type="number" min="50" max="250" value="100"></label><label>Scroll speed (sec)<input id="ov-ticker-speed" type="number" min="6" max="60" value="18"></label></div><div class="ov-color-row"><label>Text color<input id="ov-ticker-color" type="color" value="#ffffff"></label><label>Background color<input id="ov-ticker-bg-color" type="color" value="#000000"></label></div><label><span class="ov-range-head"><span>Background opacity</span><span id="ov-ticker-alpha-value">72%</span></span><input id="ov-ticker-alpha" type="range" min="0" max="100" value="72" oninput="updateOverlayAlphaLabel('ticker')"></label><div class="ov-actions"><button class="ov-live" type="button" onclick="sendPanelOverlay('ticker',true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('ticker',false)">Clear</button></div></details>
+        <details class="overlay-control-menu" id="overlay-menu-ticker">
+          <summary>Ticker</summary>
+          <label>Set name<input id="ov-ticker-set-name" type="text" placeholder="Welcome / Announcements"></label>
+          <textarea id="ov-ticker-text" placeholder="Nursery is open in room 4 - Welcome!"></textarea>
+          <div class="ov-row"><label>Text size (%)<input id="ov-ticker-scale" type="number" min="50" max="250" value="100"></label><label>Scroll speed (sec)<input id="ov-ticker-speed" type="number" min="6" max="60" value="18"></label></div>
+          <div class="ov-color-row"><label>Text color<input id="ov-ticker-color" type="color" value="#ffffff"></label><label>Background color<input id="ov-ticker-bg-color" type="color" value="#000000"></label></div>
+          <label><span class="ov-range-head"><span>Background opacity</span><span id="ov-ticker-alpha-value">72%</span></span><input id="ov-ticker-alpha" type="range" min="0" max="100" value="72" oninput="updateOverlayAlphaLabel('ticker')"></label>
+          <div class="ov-actions"><button class="ov-live" type="button" onclick="sendPanelOverlay('ticker',true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('ticker',false)">Clear</button></div>
+          <div class="ov-actions"><button class="ov-live" type="button" onclick="addTickerToSetlist()">Add to Setlist</button></div>
+        </details>
         <details class="overlay-control-menu" id="overlay-menu-text"><summary>Text overlay</summary><textarea id="ov-text-content" placeholder="Enter on-screen text..."></textarea><div class="ov-row"><label>Horizontal position (%)<input id="ov-text-x" type="number" min="0" max="100" value="50"></label><label>Vertical position (%)<input id="ov-text-y" type="number" min="0" max="100" value="50"></label></div><div class="ov-row"><label>Text size (%)<input id="ov-text-scale" type="number" min="50" max="250" value="100"></label><label>Text color<input id="ov-text-color" type="color" value="#ffffff"></label></div><div class="ov-color-row"><label>Background color<input id="ov-text-bg-color" type="color" value="#000000"></label><label><span class="ov-range-head"><span>Background opacity</span><span id="ov-text-alpha-value">55%</span></span><input id="ov-text-alpha" type="range" min="0" max="100" value="55" oninput="updateOverlayAlphaLabel('text')"></label></div><div class="ov-actions"><button class="ov-live" type="button" onclick="sendPanelOverlay('text',true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('text',false)">Clear</button></div></details>
         <details class="overlay-control-menu" id="overlay-menu-media"><summary>Media overlay</summary><label>Image or video URL<input id="ov-media-url" type="url" placeholder="https://example.com/media.png"></label><label>Choose local image or video<input id="ov-media-file" type="file" accept="image/*,video/*"></label><div class="ov-row"><label>Horizontal position (%)<input id="ov-media-x" type="number" min="0" max="100" value="0"></label><label>Vertical position (%)<input id="ov-media-y" type="number" min="0" max="100" value="0"></label></div><div class="ov-row"><label>Width (%)<input id="ov-media-w" type="number" min="5" max="100" value="100"></label><label><span class="ov-range-head"><span>Opacity</span><span id="ov-media-opacity-value">100%</span></span><input id="ov-media-opacity" type="range" min="0" max="100" value="100" oninput="updateOverlayAlphaLabel('media-opacity')"></label></div><div class="ov-actions"><button class="ov-live" type="button" onclick="sendMediaOverlay(true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('media',false)">Clear</button></div></details>
         <details class="overlay-control-menu" id="overlay-menu-logo"><summary>Logo</summary><label>Choose logo image<input id="ov-logo-file" type="file" accept="image/*"></label><div class="ov-row"><label>Horizontal position (%)<input id="ov-logo-x" type="number" min="0" max="100" value="82"></label><label>Vertical position (%)<input id="ov-logo-y" type="number" min="0" max="100" value="5"></label></div><div class="ov-row"><label>Width (%)<input id="ov-logo-w" type="number" min="2" max="50" value="12"></label><label><span class="ov-range-head"><span>Opacity</span><span id="ov-logo-opacity-value">100%</span></span><input id="ov-logo-opacity" type="range" min="0" max="100" value="100" oninput="updateOverlayAlphaLabel('logo-opacity')"></label></div><div class="ov-actions"><button class="ov-live" type="button" onclick="sendImageOverlay('logo',true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('logo',false)">Clear</button></div></details>
@@ -64023,7 +64032,7 @@ isiSembulo
         div.className = 'song-item' + (currentItem === s ? ' active' : '');
         div.dataset.index = String(itemIndex);
         const left = document.createElement('span');
-        left.textContent = s.title;
+        left.textContent = (sidebarTab === 'schedule' && s._metaKind === 'ticker_set') ? `Ticker: ${s.title}` : s.title;
         const right = document.createElement('div');
         right.style.display = 'flex';
         right.style.alignItems = 'center';
@@ -64064,6 +64073,13 @@ isiSembulo
             selectItem(itemIndex);
           };
           div.ondblclick = () => {
+            if (s._metaKind === 'ticker_set') {
+              scheduleReturnTarget = scheduleTarget;
+              buttonContextTab = 'schedule';
+              selectItem(itemIndex);
+              projectLive(true);
+              return;
+            }
             if (!getIsBibleItem(s)) return;
             scheduleReturnTarget = scheduleTarget;
             buttonContextTab = 'schedule';
@@ -65276,6 +65292,7 @@ isiSembulo
       currentIndex = i; currentItem = list[i] || null;
       if (!currentItem) return;
       document.getElementById('lyric-editor').value = currentItem.content || "";
+      if (currentItem._metaKind === 'ticker_set') loadTickerSetToSidebar(currentItem);
       if (!preserveLineCursor) lineCursor = 0;
       const isBibleEntry = getIsBibleItem(currentItem);
       if (isBibleEntry) {
@@ -66563,6 +66580,10 @@ isiSembulo
     }
 
     function projectLive(trigger = false) {
+      if (currentItem?._metaKind === 'ticker_set' && isCurrentItemFromScheduleList()) {
+        if (trigger) sendTickerSetLive(currentItem);
+        return;
+      }
       if (trigger) isLive = true;
       if (!isLive) return;
       applyProgramDisplaySource('lyrics');
@@ -68111,6 +68132,9 @@ isiSembulo
       if (!entry) return null;
       if (entry._metaKind === 'bible_verse') {
         return `bible:${entry.version || ''}:${entry.title || ''}:${entry.content || ''}`;
+      }
+      if (entry._metaKind === 'ticker_set') {
+        return `ticker:${entry.title || ''}:${entry.content || ''}:${entry.scale || ''}:${entry.speed || ''}:${entry.color || ''}:${entry.background || ''}`;
       }
       if (entry.id) {
         return `song:${entry.id}`;
@@ -71015,6 +71039,53 @@ isiSembulo
       if (name === 'ticker') Object.assign(data, { text: overlayValue('ov-ticker-text'), scale: Number(overlayValue('ov-ticker-scale',100)), speed: Number(overlayValue('ov-ticker-speed',18)), color: overlayValue('ov-ticker-color','#fff'), background: overlayRgba('ticker') });
       if (name === 'text') Object.assign(data, { text: overlayValue('ov-text-content'), x: Number(overlayValue('ov-text-x',50)), y: Number(overlayValue('ov-text-y',50)), scale: Number(overlayValue('ov-text-scale',100)), color: overlayValue('ov-text-color','#fff'), background: overlayRgba('text') });
       broadcastMessage({ type: 'OVERLAY_UPDATE', overlay: name, data });
+    }
+    function loadTickerSetToSidebar(entry) {
+      document.getElementById('ov-ticker-set-name').value = entry.title || '';
+      document.getElementById('ov-ticker-text').value = entry.text || entry.content || '';
+      document.getElementById('ov-ticker-scale').value = entry.scale || 100;
+      document.getElementById('ov-ticker-speed').value = entry.speed || 18;
+      document.getElementById('ov-ticker-color').value = entry.color || '#ffffff';
+      document.getElementById('ov-ticker-bg-color').value = entry.backgroundColor || '#000000';
+      document.getElementById('ov-ticker-alpha').value = entry.backgroundOpacity ?? 72;
+      updateOverlayAlphaLabel('ticker');
+    }
+    function addTickerToSetlist() {
+      const text = overlayValue('ov-ticker-text').trim();
+      if (!text) {
+        showToast('Enter ticker text before adding it to the setlist');
+        return;
+      }
+      const title = overlayValue('ov-ticker-set-name').trim() || text.split(/\r?\n/)[0].slice(0, 48) || 'Ticker';
+      insertIntoSchedule({
+        _metaKind: 'ticker_set',
+        title,
+        content: text,
+        text,
+        scale: Number(overlayValue('ov-ticker-scale', 100)),
+        speed: Number(overlayValue('ov-ticker-speed', 18)),
+        color: overlayValue('ov-ticker-color', '#ffffff'),
+        backgroundColor: overlayValue('ov-ticker-bg-color', '#000000'),
+        backgroundOpacity: Number(overlayValue('ov-ticker-alpha', 72)),
+        background: overlayRgba('ticker')
+      }, {
+        successMessage: 'Ticker set added to setlist',
+        duplicateMessage: 'Ticker set already exists; moved to the top'
+      });
+    }
+    function sendTickerSetLive(entry) {
+      broadcastMessage({
+        type: 'OVERLAY_UPDATE',
+        overlay: 'ticker',
+        data: {
+          enabled: true,
+          text: entry.text || entry.content || '',
+          scale: Number(entry.scale) || 100,
+          speed: Number(entry.speed) || 18,
+          color: entry.color || '#ffffff',
+          background: entry.background || 'rgba(0, 0, 0, 0.72)'
+        }
+      });
     }
     async function sendImageOverlay(name, enabled) {
       const fileId = name === 'logo' ? 'ov-logo-file' : 'ov-media-file';
