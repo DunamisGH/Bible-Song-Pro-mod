@@ -70959,8 +70959,14 @@ isiSembulo
   <script>
     let ewMediaDataUrl = '';
     let ewLogoDataUrl = '';
-    document.querySelectorAll('#overlay-sidebar-panel .overlay-control-menu').forEach((menu) => {
-      menu.setAttribute('name', 'overlay-controls');
+    const overlayMenus = [...document.querySelectorAll('#overlay-sidebar-panel .overlay-control-menu')];
+    overlayMenus.forEach((menu) => {
+      menu.addEventListener('toggle', () => {
+        if (!menu.open) return;
+        overlayMenus.forEach((otherMenu) => {
+          if (otherMenu !== menu) otherMenu.open = false;
+        });
+      });
     });
     function overlayValue(id, fallback = '') { return document.getElementById(id)?.value ?? fallback; }
     function overlayRgba(prefix) {
