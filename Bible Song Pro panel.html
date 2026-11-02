@@ -4996,17 +4996,37 @@
       gap: 6px;
     }
 
-    #overlay-sidebar-panel { flex:0 0 clamp(210px, 22vw, 280px); width:clamp(210px, 22vw, 280px); min-width:0; min-height:0; overflow-y:auto; padding:10px; border-left:1px solid var(--border); background:var(--bg-panel); color:var(--text); scrollbar-width:thin; }
-    .overlay-panel-heading { display:flex; align-items:center; justify-content:space-between; margin:0 0 7px; color:var(--text-secondary); font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
-    .overlay-control-menu { display:block; width:100%; box-sizing:border-box; margin:5px 0; padding:0 9px 9px; border:1px solid var(--border); border-radius:8px; background:var(--bg,#131923); color:var(--text,#edf2ff); font:12px/1.4 'Inter','Segoe UI',system-ui,sans-serif; }
-    .overlay-control-menu > summary { padding:9px 0; cursor:pointer; list-style:none; font-size:12px; font-weight:700; }
+    #overlay-sidebar-panel { flex:0 0 clamp(210px, 22vw, 280px); width:clamp(210px, 22vw, 280px); min-width:0; min-height:0; overflow-y:auto; padding:10px; border-left:1px solid color-mix(in srgb, var(--text) 18%, transparent); background:var(--bg-panel); color:var(--text); scrollbar-width:thin; }
+    .overlay-panel-heading { display:flex; align-items:center; justify-content:space-between; margin:0 0 7px; padding:0 0 7px; border-bottom:1px solid color-mix(in srgb, var(--text) 18%, transparent); color:var(--text); font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .overlay-control-menu { display:block; width:100%; box-sizing:border-box; margin:5px 0; padding:0 9px 9px; border:1px solid color-mix(in srgb, var(--text) 18%, transparent); border-radius:8px; background:var(--panel-content-bg,var(--bg-panel)); color:var(--text); font:12px/1.4 'Inter','Segoe UI',system-ui,sans-serif; }
+    .overlay-control-menu > summary { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:0 -9px; padding:10px 9px; border-left:3px solid transparent; border-bottom:1px solid color-mix(in srgb, var(--text) 16%, transparent); border-radius:6px 6px 0 0; background:color-mix(in srgb, var(--tab-active-color,var(--accent)) 9%, var(--panel-content-bg,var(--bg-panel))); color:var(--text); cursor:pointer; list-style:none; font-size:12px; font-weight:750; line-height:1.2; transition:background .15s ease,color .15s ease,border-color .15s ease; }
+    .overlay-control-menu > summary:hover { background:color-mix(in srgb, var(--tab-active-color,var(--accent)) 16%, var(--panel-content-bg,var(--bg-panel))); }
+    .overlay-control-menu[open] > summary { border-left-color:var(--tab-active-color,var(--accent)); background:color-mix(in srgb, var(--tab-active-color,var(--accent)) 13%, var(--panel-content-bg,var(--bg-panel))); }
+    .overlay-control-menu > summary:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
     .overlay-control-menu > summary::-webkit-details-marker { display:none; }
-    .overlay-control-menu > summary::after { content:'+'; float:right; color:var(--text-secondary); }
-    .overlay-control-menu[open] > summary::after { content:'-'; }
+    .overlay-control-menu > summary::after { content:'+'; color:var(--tab-active-color,var(--accent)); font-size:15px; font-weight:600; }
+    .overlay-control-menu[open] > summary::after { content:'−'; }
+    @supports (interpolate-size: allow-keywords) and selector(details::details-content) {
+      #overlay-sidebar-panel { interpolate-size: allow-keywords; }
+      .overlay-control-menu::details-content {
+        height: 0;
+        opacity: 0;
+        overflow: clip;
+        transition: height 0.2s ease, opacity 0.16s ease, content-visibility 0.2s allow-discrete;
+      }
+      .overlay-control-menu[open]::details-content {
+        height: auto;
+        opacity: 1;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .overlay-control-menu::details-content { transition-duration: 0s; }
+    }
     .overlay-control-menu textarea,.overlay-control-menu input,.overlay-control-menu select { box-sizing:border-box; width:100%; min-width:0; accent-color:var(--accent); }
-    .overlay-control-menu textarea { height:54px; resize:vertical; padding:7px; border:1px solid var(--border); border-radius:6px; background:var(--bg-panel); color:var(--text); font:inherit; }
-    .overlay-control-menu input:not([type="color"]):not([type="range"]):not([type="file"]) { padding:6px 7px; border:1px solid var(--border); border-radius:6px; background:var(--bg-panel); color:var(--text); }
+    .overlay-control-menu textarea { height:54px; resize:vertical; padding:7px; border:1px solid color-mix(in srgb, var(--text) 20%, transparent); border-radius:6px; background:var(--bg-panel); color:var(--text); font:inherit; }
+    .overlay-control-menu input:not([type="color"]):not([type="range"]):not([type="file"]) { padding:6px 7px; border:1px solid color-mix(in srgb, var(--text) 20%, transparent); border-radius:6px; background:var(--bg-panel); color:var(--text); }
     .overlay-control-menu input[type="file"] { font-size:10px; color:var(--text-secondary); }
+    .overlay-control-menu input[type="file"]::file-selector-button { margin-right:6px; padding:4px 7px; border:1px solid color-mix(in srgb, var(--text) 20%, transparent); border-radius:5px; background:var(--bg-panel); color:var(--text); }
     .overlay-control-menu .ov-row { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:7px; }
     .overlay-control-menu .ov-color-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:7px; }
     .overlay-control-menu .ov-color-row input[type="color"] { width:100%; height:30px; padding:2px; border:1px solid var(--border); border-radius:6px; background:var(--bg-panel); }
@@ -5014,8 +5034,8 @@
     .ov-range-head { display:flex; justify-content:space-between; gap:8px; }
     .ov-actions { display:flex; gap:7px; margin-top:9px; }
     .overlay-control-menu button { flex:1; min-height:30px; padding:6px 10px; border:1px solid transparent; border-radius:6px; cursor:pointer; font:600 11px inherit; }
-    .ov-live { background:var(--accent,#2f6df6); color:#fff; } .ov-live:hover { filter:brightness(1.1); }
-    .ov-clear { background:var(--bg-panel); border-color:var(--border)!important; color:var(--text-secondary); }
+    .ov-live { border:1px solid color-mix(in srgb, var(--tab-active-color,var(--accent)) 55%, transparent)!important; background:color-mix(in srgb, var(--tab-active-color,var(--accent)) 14%, var(--panel-content-bg,var(--bg-panel))); color:var(--text); font-weight:650; } .ov-live:hover { background:color-mix(in srgb, var(--tab-active-color,var(--accent)) 24%, var(--panel-content-bg,var(--bg-panel))); }
+    .ov-clear { background:var(--bg-panel); border-color:color-mix(in srgb, var(--text) 22%, transparent)!important; color:var(--text-secondary); }
     .ov-clear:hover { color:var(--danger,#ef4444); border-color:var(--danger,#ef4444)!important; }
     @media (max-width:900px) { #overlay-sidebar-panel { flex-basis:220px; width:220px; padding:8px; } .overlay-control-menu .ov-row { gap:5px; } }
     @media (max-width:680px) { #overlay-sidebar-panel { flex-basis:190px; width:190px; padding:6px; } }
@@ -16045,7 +16065,7 @@
           positionDualVersionPanel();
         }, true);
         </script>
-        <button class="btn toolbar-icon-btn" id="btn-remote-show" onclick="openRemoteShowModal()" title="Connect display" data-i18n-title="remote_show_connect"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M8 12h8"/><path d="M12 8v8"/><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3h9A2.5 2.5 0 0 1 19 5.5v13A2.5 2.5 0 0 1 16.5 21h-9A2.5 2.5 0 0 1 5 18.5v-13Z"/></svg></button>
+        <button class="btn toolbar-icon-btn" id="btn-remote-show" onclick="openRemoteShowModal()" title="Connect display" data-i18n-title="remote_show_connect"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M6 18v-4h2v4zM10 18v-7h2v7zM14 18V8h2v10zM18 18V5h2v13z" fill="currentColor" stroke="none"/></svg></button>
         <button class="btn toolbar-icon-btn" id="btn-settings" onclick="openModal('settingsModal')" title="Settings" data-i18n-title="common_settings"><svg width="16" height="16" viewBox="1 1 22 22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
       </div>
       <div id="preset-popover" class="preset-popover">
@@ -16160,10 +16180,47 @@
     </div>
     <aside id="overlay-sidebar-panel" aria-label="On-screen overlays">
         <div class="overlay-panel-heading">On-screen overlays</div>
-        <details class="overlay-control-menu" id="overlay-menu-ticker"><summary>Ticker</summary><textarea id="ov-ticker-text" placeholder="Nursery is open in room 4 - Welcome!"></textarea><div class="ov-row"><label>Text size (%)<input id="ov-ticker-scale" type="number" min="50" max="250" value="100"></label><label>Scroll speed (sec)<input id="ov-ticker-speed" type="number" min="6" max="60" value="18"></label></div><div class="ov-color-row"><label>Text color<input id="ov-ticker-color" type="color" value="#ffffff"></label><label>Background color<input id="ov-ticker-bg-color" type="color" value="#000000"></label></div><label><span class="ov-range-head"><span>Background opacity</span><span id="ov-ticker-alpha-value">72%</span></span><input id="ov-ticker-alpha" type="range" min="0" max="100" value="72" oninput="updateOverlayAlphaLabel('ticker')"></label><div class="ov-actions"><button class="ov-live" type="button" onclick="sendPanelOverlay('ticker',true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('ticker',false)">Clear</button></div></details>
-        <details class="overlay-control-menu" id="overlay-menu-text"><summary>Text overlay</summary><textarea id="ov-text-content" placeholder="Enter on-screen text..."></textarea><div class="ov-row"><label>Horizontal position (%)<input id="ov-text-x" type="number" min="0" max="100" value="50"></label><label>Vertical position (%)<input id="ov-text-y" type="number" min="0" max="100" value="50"></label></div><div class="ov-row"><label>Text size (%)<input id="ov-text-scale" type="number" min="50" max="250" value="100"></label><label>Text color<input id="ov-text-color" type="color" value="#ffffff"></label></div><div class="ov-color-row"><label>Background color<input id="ov-text-bg-color" type="color" value="#000000"></label><label><span class="ov-range-head"><span>Background opacity</span><span id="ov-text-alpha-value">55%</span></span><input id="ov-text-alpha" type="range" min="0" max="100" value="55" oninput="updateOverlayAlphaLabel('text')"></label></div><div class="ov-actions"><button class="ov-live" type="button" onclick="sendPanelOverlay('text',true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('text',false)">Clear</button></div></details>
-        <details class="overlay-control-menu" id="overlay-menu-media"><summary>Media overlay</summary><label>Image or video URL<input id="ov-media-url" type="url" placeholder="https://example.com/media.png"></label><label>Choose local image or video<input id="ov-media-file" type="file" accept="image/*,video/*"></label><div class="ov-row"><label>Horizontal position (%)<input id="ov-media-x" type="number" min="0" max="100" value="0"></label><label>Vertical position (%)<input id="ov-media-y" type="number" min="0" max="100" value="0"></label></div><div class="ov-row"><label>Width (%)<input id="ov-media-w" type="number" min="5" max="100" value="100"></label><label><span class="ov-range-head"><span>Opacity</span><span id="ov-media-opacity-value">100%</span></span><input id="ov-media-opacity" type="range" min="0" max="100" value="100" oninput="updateOverlayAlphaLabel('media-opacity')"></label></div><div class="ov-actions"><button class="ov-live" type="button" onclick="sendMediaOverlay(true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('media',false)">Clear</button></div></details>
-        <details class="overlay-control-menu" id="overlay-menu-logo"><summary>Logo</summary><label>Choose logo image<input id="ov-logo-file" type="file" accept="image/*"></label><div class="ov-row"><label>Horizontal position (%)<input id="ov-logo-x" type="number" min="0" max="100" value="82"></label><label>Vertical position (%)<input id="ov-logo-y" type="number" min="0" max="100" value="5"></label></div><div class="ov-row"><label>Width (%)<input id="ov-logo-w" type="number" min="2" max="50" value="12"></label><label><span class="ov-range-head"><span>Opacity</span><span id="ov-logo-opacity-value">100%</span></span><input id="ov-logo-opacity" type="range" min="0" max="100" value="100" oninput="updateOverlayAlphaLabel('logo-opacity')"></label></div><div class="ov-actions"><button class="ov-live" type="button" onclick="sendImageOverlay('logo',true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('logo',false)">Clear</button></div></details>
+        <details class="overlay-control-menu" id="overlay-menu-ticker">
+          <summary>Ticker</summary>
+          <label>Set name<input id="ov-ticker-set-name" type="text" placeholder="Welcome / Announcements"></label>
+          <textarea id="ov-ticker-text" placeholder="Nursery is open in room 4 - Welcome!"></textarea>
+          <div class="ov-row"><label>Text size (%)<input id="ov-ticker-scale" type="number" min="50" max="250" value="100"></label><label>Scroll speed (sec)<input id="ov-ticker-speed" type="number" min="6" max="60" value="18"></label></div>
+          <div class="ov-color-row"><label>Text color<input id="ov-ticker-color" type="color" value="#ffffff"></label><label>Background color<input id="ov-ticker-bg-color" type="color" value="#000000"></label></div>
+          <label><span class="ov-range-head"><span>Background opacity</span><span id="ov-ticker-alpha-value">72%</span></span><input id="ov-ticker-alpha" type="range" min="0" max="100" value="72" oninput="updateOverlayAlphaLabel('ticker')"></label>
+          <div class="ov-actions"><button class="ov-live" type="button" onclick="sendPanelOverlay('ticker',true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('ticker',false)">Clear</button></div>
+          <div class="ov-actions"><button class="ov-live" type="button" onclick="addTickerToSetlist()">Add to Setlist</button></div>
+        </details>
+        <details class="overlay-control-menu" id="overlay-menu-text">
+          <summary>Text overlay</summary>
+          <label>Set name<input id="ov-text-set-name" type="text" placeholder="Welcome message"></label>
+          <textarea id="ov-text-content" placeholder="Enter on-screen text..."></textarea>
+          <div class="ov-row"><label>Horizontal position (%)<input id="ov-text-x" type="number" min="0" max="100" value="50"></label><label>Vertical position (%)<input id="ov-text-y" type="number" min="0" max="100" value="50"></label></div>
+          <div class="ov-row"><label>Text size (%)<input id="ov-text-scale" type="number" min="50" max="250" value="100"></label><label>Text color<input id="ov-text-color" type="color" value="#ffffff"></label></div>
+          <div class="ov-color-row"><label>Background color<input id="ov-text-bg-color" type="color" value="#000000"></label><label><span class="ov-range-head"><span>Background opacity</span><span id="ov-text-alpha-value">55%</span></span><input id="ov-text-alpha" type="range" min="0" max="100" value="55" oninput="updateOverlayAlphaLabel('text')"></label></div>
+          <div class="ov-actions"><button class="ov-live" type="button" onclick="sendPanelOverlay('text',true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('text',false)">Clear</button></div>
+          <div class="ov-actions"><button class="ov-live" type="button" onclick="addOverlaySetToSetlist('text')">Add to Setlist</button></div>
+        </details>
+        <details class="overlay-control-menu" id="overlay-menu-media">
+          <summary>Media overlay</summary>
+          <label>Set name<input id="ov-media-set-name" type="text" placeholder="Service background"></label>
+          <label>Image or video URL<input id="ov-media-url" type="url" placeholder="https://example.com/media.png"></label>
+          <label>Choose local image or video<input id="ov-media-file" type="file" accept="image/*,video/*"></label>
+          <div class="ov-set-source" id="ov-media-set-source" hidden></div>
+          <div class="ov-row"><label>Horizontal position (%)<input id="ov-media-x" type="number" min="0" max="100" value="0"></label><label>Vertical position (%)<input id="ov-media-y" type="number" min="0" max="100" value="0"></label></div>
+          <div class="ov-row"><label>Width (%)<input id="ov-media-w" type="number" min="5" max="100" value="100"></label><label><span class="ov-range-head"><span>Opacity</span><span id="ov-media-opacity-value">100%</span></span><input id="ov-media-opacity" type="range" min="0" max="100" value="100" oninput="updateOverlayAlphaLabel('media-opacity')"></label></div>
+          <div class="ov-actions"><button class="ov-live" type="button" onclick="sendMediaOverlay(true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('media',false)">Clear</button></div>
+          <div class="ov-actions"><button class="ov-live" type="button" onclick="addOverlaySetToSetlist('media')">Add to Setlist</button></div>
+        </details>
+        <details class="overlay-control-menu" id="overlay-menu-logo">
+          <summary>Logo</summary>
+          <label>Set name<input id="ov-logo-set-name" type="text" placeholder="Church logo"></label>
+          <label>Choose logo image<input id="ov-logo-file" type="file" accept="image/*"></label>
+          <div class="ov-set-source" id="ov-logo-set-source" hidden></div>
+          <div class="ov-row"><label>Horizontal position (%)<input id="ov-logo-x" type="number" min="0" max="100" value="82"></label><label>Vertical position (%)<input id="ov-logo-y" type="number" min="0" max="100" value="5"></label></div>
+          <div class="ov-row"><label>Width (%)<input id="ov-logo-w" type="number" min="2" max="50" value="12"></label><label><span class="ov-range-head"><span>Opacity</span><span id="ov-logo-opacity-value">100%</span></span><input id="ov-logo-opacity" type="range" min="0" max="100" value="100" oninput="updateOverlayAlphaLabel('logo-opacity')"></label></div>
+          <div class="ov-actions"><button class="ov-live" type="button" onclick="sendImageOverlay('logo',true)">Show / Update</button><button class="ov-clear" type="button" onclick="sendPanelOverlay('logo',false)">Clear</button></div>
+          <div class="ov-actions"><button class="ov-live" type="button" onclick="addOverlaySetToSetlist('logo')">Add to Setlist</button></div>
+        </details>
     </aside>
     <div id="program-width-handle" style="display:none;"><div class="grip"></div></div>
     <aside id="program-display-panel" style="display:none;" aria-hidden="true">
@@ -64004,7 +64061,8 @@ isiSembulo
         div.className = 'song-item' + (currentItem === s ? ' active' : '');
         div.dataset.index = String(itemIndex);
         const left = document.createElement('span');
-        left.textContent = s.title;
+        const setlistType = s._metaKind === 'ticker_set' ? 'Ticker' : (s._metaKind === 'overlay_set' ? ({ text: 'Text', media: 'Media', logo: 'Logo' }[s.overlay] || 'Overlay') : '');
+        left.textContent = (sidebarTab === 'schedule' && setlistType) ? `${setlistType}: ${s.title}` : s.title;
         const right = document.createElement('div');
         right.style.display = 'flex';
         right.style.alignItems = 'center';
@@ -64045,6 +64103,13 @@ isiSembulo
             selectItem(itemIndex);
           };
           div.ondblclick = () => {
+            if (s._metaKind === 'ticker_set' || s._metaKind === 'overlay_set') {
+              scheduleReturnTarget = scheduleTarget;
+              buttonContextTab = 'schedule';
+              selectItem(itemIndex);
+              projectLive(true);
+              return;
+            }
             if (!getIsBibleItem(s)) return;
             scheduleReturnTarget = scheduleTarget;
             buttonContextTab = 'schedule';
@@ -65257,6 +65322,7 @@ isiSembulo
       currentIndex = i; currentItem = list[i] || null;
       if (!currentItem) return;
       document.getElementById('lyric-editor').value = currentItem.content || "";
+      if (currentItem._metaKind === 'ticker_set' || currentItem._metaKind === 'overlay_set') loadOverlaySetToSidebar(currentItem);
       if (!preserveLineCursor) lineCursor = 0;
       const isBibleEntry = getIsBibleItem(currentItem);
       if (isBibleEntry) {
@@ -66544,6 +66610,10 @@ isiSembulo
     }
 
     function projectLive(trigger = false) {
+      if ((currentItem?._metaKind === 'ticker_set' || currentItem?._metaKind === 'overlay_set') && isCurrentItemFromScheduleList()) {
+        if (trigger) sendOverlaySetLive(currentItem);
+        return;
+      }
       if (trigger) isLive = true;
       if (!isLive) return;
       applyProgramDisplaySource('lyrics');
@@ -68092,6 +68162,12 @@ isiSembulo
       if (!entry) return null;
       if (entry._metaKind === 'bible_verse') {
         return `bible:${entry.version || ''}:${entry.title || ''}:${entry.content || ''}`;
+      }
+      if (entry._metaKind === 'ticker_set') {
+        return `ticker:${entry.title || ''}:${entry.text || entry.content || ''}`;
+      }
+      if (entry._metaKind === 'overlay_set') {
+        return `${entry.overlay || 'overlay'}:${entry.title || ''}:${entry.content || entry.source || ''}`;
       }
       if (entry.id) {
         return `song:${entry.id}`;
@@ -70956,6 +71032,15 @@ isiSembulo
   <script>
     let ewMediaDataUrl = '';
     let ewLogoDataUrl = '';
+    const overlayMenus = [...document.querySelectorAll('#overlay-sidebar-panel .overlay-control-menu')];
+    overlayMenus.forEach((menu) => {
+      menu.addEventListener('toggle', () => {
+        if (!menu.open) return;
+        overlayMenus.forEach((otherMenu) => {
+          if (otherMenu !== menu) otherMenu.open = false;
+        });
+      });
+    });
     function overlayValue(id, fallback = '') { return document.getElementById(id)?.value ?? fallback; }
     function overlayRgba(prefix) {
       const hex = String(overlayValue(`ov-${prefix}-bg-color`, '#000000')).replace('#', '');
@@ -70987,6 +71072,114 @@ isiSembulo
       if (name === 'ticker') Object.assign(data, { text: overlayValue('ov-ticker-text'), scale: Number(overlayValue('ov-ticker-scale',100)), speed: Number(overlayValue('ov-ticker-speed',18)), color: overlayValue('ov-ticker-color','#fff'), background: overlayRgba('ticker') });
       if (name === 'text') Object.assign(data, { text: overlayValue('ov-text-content'), x: Number(overlayValue('ov-text-x',50)), y: Number(overlayValue('ov-text-y',50)), scale: Number(overlayValue('ov-text-scale',100)), color: overlayValue('ov-text-color','#fff'), background: overlayRgba('text') });
       broadcastMessage({ type: 'OVERLAY_UPDATE', overlay: name, data });
+    }
+    function loadOverlaySetToSidebar(entry) {
+      if (entry._metaKind === 'ticker_set') {
+        document.getElementById('ov-ticker-set-name').value = entry.title || '';
+        document.getElementById('ov-ticker-text').value = entry.text || entry.content || '';
+        return;
+      }
+      const overlay = entry.overlay;
+      document.getElementById(`ov-${overlay}-set-name`).value = entry.title || '';
+      if (overlay === 'text') {
+        document.getElementById('ov-text-content').value = entry.content || '';
+        return;
+      }
+      const source = entry.source || '';
+      const isDataUrl = source.startsWith('data:');
+      const fileInput = document.getElementById(overlay === 'logo' ? 'ov-logo-file' : 'ov-media-file');
+      if (fileInput) fileInput.value = '';
+      if (overlay === 'logo') {
+        ewLogoDataUrl = source;
+      } else {
+        ewMediaDataUrl = isDataUrl ? source : '';
+        document.getElementById('ov-media-url').value = isDataUrl ? '' : source;
+      }
+      const sourceLabel = document.getElementById(`ov-${overlay}-set-source`);
+      if (sourceLabel) {
+        sourceLabel.hidden = !isDataUrl;
+        sourceLabel.textContent = isDataUrl ? `Saved file: ${entry.sourceName || 'local media'}` : '';
+      }
+    }
+    function addTickerToSetlist() {
+      const text = overlayValue('ov-ticker-text').trim();
+      if (!text) {
+        showToast('Enter ticker text before adding it to the setlist');
+        return;
+      }
+      const title = overlayValue('ov-ticker-set-name').trim() || text.split(/\r?\n/)[0].slice(0, 48) || 'Ticker';
+      insertIntoSchedule({
+        _metaKind: 'ticker_set',
+        title,
+        content: text,
+        text
+      }, {
+        successMessage: 'Ticker set added to setlist',
+        duplicateMessage: 'Ticker set already exists; moved to the top'
+      });
+    }
+    async function addOverlaySetToSetlist(overlay) {
+      const labels = { text: 'Text overlay', media: 'Media overlay', logo: 'Logo' };
+      if (!labels[overlay]) return;
+      let content = '';
+      let source = '';
+      let sourceName = '';
+      if (overlay === 'text') {
+        content = overlayValue('ov-text-content').trim();
+      } else {
+        const fileInputId = overlay === 'logo' ? 'ov-logo-file' : 'ov-media-file';
+        const file = document.getElementById(fileInputId)?.files?.[0];
+        try {
+          const uploaded = await readOverlayFile(fileInputId);
+          if (uploaded) {
+            source = uploaded;
+            sourceName = file?.name || '';
+            if (overlay === 'logo') ewLogoDataUrl = uploaded;
+            else ewMediaDataUrl = uploaded;
+          } else if (overlay === 'logo') {
+            source = ewLogoDataUrl;
+          } else {
+            source = ewMediaDataUrl || overlayValue('ov-media-url').trim();
+          }
+        } catch (_) {
+          showToast('Could not read the selected image or video');
+          return;
+        }
+        content = source;
+      }
+      if (!content) {
+        showToast(overlay === 'text' ? 'Enter overlay text before adding it to the setlist' : 'Choose a file or enter a media URL before adding it to the setlist');
+        return;
+      }
+      const nameId = `ov-${overlay}-set-name`;
+      const fallbackTitle = overlay === 'text'
+        ? content.split(/\r?\n/)[0].slice(0, 48)
+        : (sourceName || source.split(/[\\/?#]/).filter(Boolean).pop() || labels[overlay]);
+      const title = overlayValue(nameId).trim() || fallbackTitle;
+      insertIntoSchedule({
+        _metaKind: 'overlay_set',
+        overlay,
+        title,
+        content: overlay === 'text' ? content : '',
+        source: overlay === 'text' ? '' : source,
+        sourceName
+      }, {
+        successMessage: `${labels[overlay]} added to setlist`,
+        duplicateMessage: `${labels[overlay]} already exists; moved to the top`
+      });
+    }
+    function sendOverlaySetLive(entry) {
+      if (entry._metaKind === 'ticker_set') {
+        document.getElementById('ov-ticker-text').value = entry.text || entry.content || '';
+        sendPanelOverlay('ticker', true);
+        return;
+      }
+      loadOverlaySetToSidebar(entry);
+      if (entry.overlay === 'text') {
+        sendPanelOverlay('text', true);
+      } else {
+        sendImageOverlay(entry.overlay, true);
+      }
     }
     async function sendImageOverlay(name, enabled) {
       const fileId = name === 'logo' ? 'ov-logo-file' : 'ov-media-file';
