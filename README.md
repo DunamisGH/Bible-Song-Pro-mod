@@ -20,7 +20,7 @@ Bible, Hymns, and books Converter to make custom books eg. hymns, canticles, psa
 
 ![Setlist with ticker and text overlays](screenshots/sidebar.png)
 
-![Setlist with ticker and text overlays](screenshots/sidebar.png)
+![Setlist with ticker and text overlays](screenshots/books.png)
 
 ![Bible Song Pro control panel](screenshots/network.png)
 
