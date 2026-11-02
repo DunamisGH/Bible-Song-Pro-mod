@@ -12,6 +12,20 @@ A community-maintained fork of [Bible Song Pro](https://github.com/Johnbatey/bib
 - Use right-sidebar menus with clearer theme-aware styling and accordion behavior.
 - Keep Bible passages, songs, and overlay sets together in one service setlist.
 
+## Bonus
+
+Bible, Hymns, and books Converter to make custom books eg. hymns, canticles, psalms etc. Just put book into csv using required format for the converter to convert.
+
+## Preview
+
+![Bible Song Pro control panel](screenshots/results.png)
+
+![Setlist with ticker and text overlays](screenshots/sidebar.png)
+
+![Bible Song Pro control panel](screenshots/network.png)
+
+![Setlist with ticker and text overlays](screenshots/sidebar.png)
+
 ## Quick start
 
 1. Download and extract the ZIP.
