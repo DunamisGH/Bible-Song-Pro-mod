@@ -2,7 +2,7 @@
 
 A community-maintained fork of [Bible Song Pro](https://github.com/Johnbatey/bible-song-pro) for presenting Bible passages, song lyrics, and on-screen overlays. This fork adds LAN display support and workflow improvements for setlists and overlays.
 
-[Download the project ZIP](https://github.com/DunamisGH/Bible-Song-Pro-mod/archive/refs/heads/setlisting-overlays.zip) · [View the upstream project](https://github.com/Johnbatey/bible-song-pro)
+[Download the project ZIP](https://github.com/DunamisGH/Bible-Song-Pro-mod/archive/refs/heads/main-current.zip) · [View the upstream project](https://github.com/Johnbatey/bible-song-pro)
 
 ## What’s in this fork
 
@@ -18,13 +18,13 @@ Bible, Hymns, and books Converter to make custom books eg. hymns, canticles, psa
 
 ## Preview
 
-![Bible Song Pro control panel](screenshots/results.png)
+![Setlist with ticker and text overlays](screenshots/sidebar.png)
 
 ![Setlist with ticker and text overlays](screenshots/sidebar.png)
 
 ![Bible Song Pro control panel](screenshots/network.png)
 
-![Setlist with ticker and text overlays](screenshots/sidebar.png)
+![Bible Song Pro control panel](screenshots/results.png)
 
 ## Quick start
 
