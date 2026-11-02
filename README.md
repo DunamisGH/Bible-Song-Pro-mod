@@ -58,3 +58,5 @@ software.
 
 This project is not affiliated with or endorsed by any commercial Bible Song
 Pro product or its developers.
+
+This repository is forked from [Johnbatey/bible-song-pro](https://github.com/Johnbatey/bible-song-pro).
