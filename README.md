@@ -1,62 +1,46 @@
-# Bible Song Pro LAN display setup
+# Bible Song Pro Mod
 
-This project includes a lightweight LAN relay so the control panel and display can sync across devices on the same network.
+A community-maintained fork of [Bible Song Pro](https://github.com/Johnbatey/bible-song-pro) for presenting Bible passages, song lyrics, and on-screen overlays. This fork adds LAN display support and workflow improvements for setlists and overlays.
 
-## Run it
+[Download the project ZIP](https://github.com/DunamisGH/Bible-Song-Pro-mod/archive/refs/heads/setlisting-overlays.zip) · [View the upstream project](https://github.com/Johnbatey/bible-song-pro)
 
-Windows:
+## What’s in this fork
+
+- Sync the control panel and display over a local network.
+- Use Tailscale Funnel for remote access when needed.
+- Add ticker, text, media, and logo overlays to setlists.
+- Use right-sidebar menus with clearer theme-aware styling and accordion behavior.
+- Keep Bible passages, songs, and overlay sets together in one service setlist.
+
+## Quick start
+
+1. Download and extract the ZIP.
+2. On Windows, run `start_lan.bat`, or start the server manually with `py -3 lan_server.py`.
+
+3. Open the control panel and display on the same computer or another device on your network. Replace `<your-lan-ip>` with the server computer’s LAN address:
+
+	- Control panel: `http://<your-lan-ip>:8000/Bible%20Song%20Pro%20panel.html`
+	- Display: `http://<your-lan-ip>:8000/BSP_display.html`
+
+The display connects to the relay at `ws://<your-lan-ip>:5511`. For same-computer use, `localhost` is also available.
+
+## Remote access with Tailscale Funnel
+
+Run `start_funnel.bat` on Windows, or start the server manually with:
 
 ```bat
-py -3 lan_server.py
+py -3 lan_server_funnel.py
 ```
 
-To start the server and configure Tailscale Funnel for internet access, run:
+The Funnel setup uses HTTPS port `443` and relay port `10000`. Enter those ports in Remote Show settings. Stopping the launcher stops the local server but may leave Funnel routes configured; turn them off with:
 
 ```bat
-start_funnel.bat
+tailscale funnel --https=443 off
+tailscale funnel --https=10000 off
 ```
 
-This exposes the web page on Funnel HTTPS port `443` and the WebSocket relay on
-port `10000`. In Bible Song Pro's Remote Show settings, use port `443` and relay
-port `10000`. The Funnel routes are configured in Tailscale background mode;
-stopping this launcher stops the local app server, but leaves the routes configured.
-Turn those routes off with `tailscale funnel --https=443 off` and
-`tailscale funnel --https=10000 off`.
+## Fork and attribution
 
-or:
+This fork is independently maintained by **DunamisGH**. DunamisGH’s work here covers the fork’s additional features and modifications; it does not claim ownership of the original project or its code.
 
-```bat
-py -3 lan_server.py --host 0.0.0.0 --http-port 8000 --relay-port 5511
-```
-
-Then open the control panel and display pages on the same machine or another device on the LAN:
-
-- Control panel: http://<your-lan-ip>:8000/Bible%20Song%20Pro%20panel.html
-- Display: http://<your-lan-ip>:8000/BSP_display.html
-
-The display page will automatically try to connect to the same host over WebSocket:
-
-- ws://<your-lan-ip>:5511
-
-## Notes
-
-- The relay is intentionally minimal and designed for local network use.
-- If you load the display using `localhost`, it will default to `127.0.0.1`, which only works on the same machine.
-- To use another device on the LAN, open the page via the server's LAN IP address.
-
-## Copyright Disclaimer
-
-© 2026 DunamisGH. All rights reserved.
-
-This software is provided "as is", without warranty of any kind, express or
-implied, including but not limited to the warranties of merchantability,
-fitness for a particular purpose, and noninfringement. In no event shall the
-authors or copyright holders be liable for any claim, damages, or other
-liability, whether in an action of contract, tort, or otherwise, arising from,
-out of, or in connection with the software or the use or other dealings in the
-software.
-
-This project is not affiliated with or endorsed by any commercial Bible Song
-Pro product or its developers.
-
-This repository is forked from [Johnbatey/bible-song-pro](https://github.com/Johnbatey/bible-song-pro).
+The upstream project is copyright © 2026 Johnson Olakotan and is licensed under the GNU General Public License, version 3.0 (GPL-3.0). See the upstream [copyright notice](https://github.com/Johnbatey/bible-song-pro/blob/main/COPYRIGHT.md) and [license](https://github.com/Johnbatey/bible-song-pro/blob/main/LICENSE) for the original notices and license terms.
